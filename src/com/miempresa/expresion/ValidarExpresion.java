@@ -10,12 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTextPane;
 public class ValidarExpresion extends JFrame {
 
 	private JPanel contentPane;
 	private JButton btnValidar;
 	private JTextField txtExpresion;
-	private Stack<String> miPila = new Stack<String>();
+	private LinkedList<String> miLista = new LinkedList<String>();
 
 	/**
 	 * Launch the application.
@@ -41,23 +42,25 @@ public class ValidarExpresion extends JFrame {
 		btnValidar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				miLista.clear();
 				String strExpresion = txtExpresion.getText();
 				for(int i=0; i < strExpresion.length(); i++) {
 					if( strExpresion.charAt(i) == '(' ) {
-						miPila.push("(");
+						miLista.addFirst("(");
 					}
 					if( strExpresion.charAt(i) == ')') {
-						if( !miPila.empty() ) {
-							miPila.pop();
+						if(miLista.contains("(")) {
+							miLista.removeFirst();
+						}
+						else {
+							miLista.addLast(")");
 						}
 					}
-					
 				}
-				
-				if (miPila.empty()) 
-					JOptionPane.showMessageDialog(null, "La expresión algebráica está completa.");
+				if (miLista.isEmpty()) 
+					JOptionPane.showMessageDialog(null, "La expresión algebráica está correcta.");
 				else
-					JOptionPane.showMessageDialog(null, "La expresión alegráica está incompleta.");
+					JOptionPane.showMessageDialog(null, "La expresión alegráica está incorrecta.");
 			}
 		});
 		btnValidar.setBounds(225, 148, 89, 23);
